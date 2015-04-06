@@ -35,8 +35,8 @@ $( "#motion" ).append( '<div id="messageArea">Messages will be displayed here.</
 $( "#motion" ).append( '<div id="messageArea2">');
 
 
-$("#videoCanvas").css('display','none');
-$("#layer2").css('display','none');
+// $("#videoCanvas").css('display','none');
+// $("#layer2").css('display','none');
 
 
 	/**
@@ -134,8 +134,8 @@ var buttons = [];
 
 		var width = videoCanvas.width;
 		var height = videoCanvas.height;
-		var ancho = 32;
-		var alto = 32;
+		var ancho = 52;
+		var alto = 82;
 
 		/**
 		*      NW   N    NE
@@ -148,30 +148,30 @@ var buttons = [];
 		var NWData = { name:"NW", image:NW, x:1, y:1, w:ancho, h:alto };
 		buttons.push( NWData );
 		
-		var NC = new Image();
-		NC.src ="images/SquareGreen.png";
-		var NCData = { name:"NC", image:NC, x:parseInt(width/2), y:1, w:ancho, h:alto };
-		buttons.push( NCData );
+		// var NC = new Image();
+		// NC.src ="images/SquareGreen.png";
+		// var NCData = { name:"NC", image:NC, x:parseInt(width/2), y:1, w:ancho, h:alto };
+		// buttons.push( NCData );
 		
 		var NE = new Image();
 		NE.src ="images/SquareGreen.png";
-		var NEData = { name:"NE", image:NE, x:parseInt(width)-ancho, y:1, w:ancho, h:alto };
+		var NEData = { name:"NE", image:NE, x:parseInt(width)-ancho-10, y:1, w:ancho, h:alto };
 		buttons.push( NEData );
 
-		var SE = new Image();
-		SE.src ="images/SquareGreen.png";
-		var SEData = { name:"SE", image:SE, x:width-ancho, y:parseInt(height/2), w:ancho, h:alto };
-		buttons.push( SEData );
+		// var SE = new Image();
+		// SE.src ="images/SquareGreen.png";
+		// var SEData = { name:"SE", image:SE, x:width-ancho-10, y:parseInt(height/2), w:ancho, h:alto };
+		// buttons.push( SEData );
 
-		var SC = new Image();
-		SC.src ="images/SquareGreen.png";
-		var SCData = { name:"SC", image:SC, x:parseInt(width/2), y:parseInt(height/2), w:ancho, h:alto };
-		buttons.push( SCData );
+		// var SC = new Image();
+		// SC.src ="images/SquareGreen.png";
+		// var SCData = { name:"SC", image:SC, x:parseInt(width/2), y:parseInt(height/2), w:ancho, h:alto };
+		// buttons.push( SCData );
 
-		var SW = new Image();
-		SW.src ="images/SquareGreen.png";
-		var SWData = { name:"SW", image:SW, x:1, y:parseInt(height/2), w:ancho, h:alto };
-		buttons.push( SWData );
+		// var SW = new Image();
+		// SW.src ="images/SquareGreen.png";
+		// var SWData = { name:"SW", image:SW, x:1, y:parseInt(height/2), w:ancho, h:alto };
+		// buttons.push( SWData );
 
 // start the loop				
 animate();
@@ -264,29 +264,33 @@ function checkAreas()
 			// evita guardar la misma posicion varias veces seguidas
 			if (buttons[b].name !=  lastMotion.p ) {
 				
-				var d = new Date();
-				var diferenciaTiempo = parseFloat(d.getTime())-parseFloat(lastMotion.t);
+				// var d = new Date();
+				// var diferenciaTiempo = parseFloat(d.getTime())-parseFloat(lastMotion.t);
 				
 				// borra movimientos antiguos ( de mas de 1000 milemesimas)
-				if(diferenciaTiempo>800) {
-					motionArray=[];
-					motionArray.push(lastMotion);
-				} 
-				else {
-					console.debug("motionArray", motionArray);
-					// primer y ulimo posiciones
-					var posIni = motionArray[0];
-					var posFin = motionArray[motionArray.length-1];
-					// console.debug(posIni, posFin)
-					// console.debug(posIni["p"])
-				}
+				// if(diferenciaTiempo>800) {
+				// 	motionArray=[];
+				// 	motionArray.push(lastMotion);
+				// } 
+				// else {
+				// 	console.debug("motionArray", motionArray);
+				// 	// primer y ulimo posiciones
+				// 	var posIni = motionArray[0];
+				// 	var posFin = motionArray[motionArray.length-1];
+				// 	console.debug(posIni, posFin)
+				// }
 				
 				// imprime direccion SE => SW y tiempo 123
-				console.debug(lastMotion.p, '=>', buttons[b].name, diferenciaTiempo)
+				console.debug(lastMotion.p)
+				if( lastMotion.p=='NE' && buttons[b].name=='NW' 
+					) { console.log("izquierda"); }
+				else if( lastMotion.p=='NW' && buttons[b].name=='NE'  
+				    ) { console.log("derecha"); }	
+
+					lastMotion = {'p':buttons[b].name};
 
 				//inserta posicion y tiempo en array
-				lastMotion = {p:buttons[b].name, t:d.getTime()};
-				motionArray.push(lastMotion);
+				// motionArray.push(lastMotion);
 
 				// console.log( "Button " + buttons[b].name + " triggered." ); // do stuff
 				// messageArea.innerHTML = "<font size='+4' color=" + buttons[b].name + "><b>Button " + buttons[b].name + " triggered.</b></font>";		
