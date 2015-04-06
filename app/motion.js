@@ -1,4 +1,27 @@
+var motionArray = [];		// contains array of objects {position:'NW', time:'37'}
+var lastMotion = {};		// contains last movement so it doesn't repeat same point many times
 
+
+
+$( document ).ready(function() {
+    $('#muestra').click(function(){
+    	// alert("h")
+    	console.debug("motionArray", motionArray)
+
+		var res;
+
+		res = motionArray.every(function(element, index, array) {
+		    console.log("element:", element);
+		    if (element.t <= 1) {
+		        return false;
+		    }
+
+		    return true;
+		});
+		console.log("res:", res);
+
+    })
+});
 
 $( "#motion" ).append( '<video id="monitor" autoplay style="display: none; width: 320px; height: 240px;"></video>');
 $( "#motion" ).append( '<div id="canvasLayers"  width="320" height="240"  style="position: relative; left: 0px; top: 0px;">');
@@ -125,10 +148,10 @@ var buttons = [];
 		var NWData = { name:"NW", image:NW, x:1, y:1, w:ancho, h:alto };
 		buttons.push( NWData );
 		
-		var N = new Image();
-		N.src ="images/SquareGreen.png";
-		var NData = { name:"N", image:N, x:parseInt(width/2), y:1, w:ancho, h:alto };
-		buttons.push( NData );
+		var NC = new Image();
+		NC.src ="images/SquareGreen.png";
+		var NCData = { name:"NC", image:NC, x:parseInt(width/2), y:1, w:ancho, h:alto };
+		buttons.push( NCData );
 		
 		var NE = new Image();
 		NE.src ="images/SquareGreen.png";
@@ -140,10 +163,10 @@ var buttons = [];
 		var SEData = { name:"SE", image:SE, x:width-ancho, y:parseInt(height/2), w:ancho, h:alto };
 		buttons.push( SEData );
 
-		var S = new Image();
-		S.src ="images/SquareGreen.png";
-		var SData = { name:"S", image:S, x:parseInt(width/2), y:parseInt(height/2), w:ancho, h:alto };
-		buttons.push( SData );
+		var SC = new Image();
+		SC.src ="images/SquareGreen.png";
+		var SCData = { name:"SC", image:SC, x:parseInt(width/2), y:parseInt(height/2), w:ancho, h:alto };
+		buttons.push( SCData );
 
 		var SW = new Image();
 		SW.src ="images/SquareGreen.png";
@@ -238,8 +261,37 @@ function checkAreas()
 		var average = Math.round(sum / (3 * countPixels));
 		if (average > 50) // more than 20% movement detected
 		{
-			console.log( "Button " + buttons[b].name + " triggered." ); // do stuff
-			messageArea.innerHTML = "<font size='+4' color=" + buttons[b].name + "><b>Button " + buttons[b].name + " triggered.</b></font>";
+			// evita guardar la misma posicion varias veces seguidas
+			if (buttons[b].name !=  lastMotion.p ) {
+				
+				var d = new Date();
+				var diferenciaTiempo = parseFloat(d.getTime())-parseFloat(lastMotion.t);
+				
+				// borra movimientos antiguos ( de mas de 1000 milemesimas)
+				if(diferenciaTiempo>800) {
+					motionArray=[];
+					motionArray.push(lastMotion);
+				} 
+				else {
+					console.debug("motionArray", motionArray);
+					// primer y ulimo posiciones
+					var posIni = motionArray[0];
+					var posFin = motionArray[motionArray.length-1];
+					// console.debug(posIni, posFin)
+					// console.debug(posIni["p"])
+				}
+				
+				// imprime direccion SE => SW y tiempo 123
+				console.debug(lastMotion.p, '=>', buttons[b].name, diferenciaTiempo)
+
+				//inserta posicion y tiempo en array
+				lastMotion = {p:buttons[b].name, t:d.getTime()};
+				motionArray.push(lastMotion);
+
+				// console.log( "Button " + buttons[b].name + " triggered." ); // do stuff
+				// messageArea.innerHTML = "<font size='+4' color=" + buttons[b].name + "><b>Button " + buttons[b].name + " triggered.</b></font>";		
+			}
+
 		}
 	}
 }
