@@ -4,7 +4,7 @@ var CamMotion = CamMotion || {};
  */
 CamMotion.Detectors = (function () {
 
-	function Motion(points, minX, maxX, minY, maxY) {
+	function Motion(points, minX, maxX, minY, maxY) {console.debug(points, minX, maxX, minY, maxY)
 		var vector = calcMovementVector(points);
 		return vector[0] > minX && vector[0] < maxX
 			&& vector[1] > minY && vector[1] < maxY;

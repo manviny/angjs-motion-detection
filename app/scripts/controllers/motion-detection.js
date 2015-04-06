@@ -9,6 +9,25 @@
  */
 angular.module('motionApp')
   .controller('MotionDetectionCtrl', function ($scope) {
+
+
+		$( "#motion" ).append( '<video id="monitor" autoplay style="display: none; width: 320px; height: 240px;"></video>');
+		$( "#motion" ).append( '<div id="canvasLayers"  width="320" height="240"  style="position: relative; left: 0px; top: 0px;">');
+		$( "#motion" ).append( '<canvas id="videoCanvas" width="320" height="240" style="z-index: 1; position: absolute; left:0px; top:0px;"></canvas>');
+		$( "#motion" ).append( '<canvas id="layer2"     width="320" height="240" style="z-index: 2; position: absolute; left:0px; top:0px; opacity:0.5;"></canvas>');
+		$( "#motion" ).append( '</div>');
+		$( "#motion" ).append( '<canvas id="blendCanvas" style="display: none; position: relative; left: 320px; top: 240px; width: 320px; height: 240px;"></canvas>');
+
+		$( "#motion" ).append( '<div id="messageError"></div>');
+		$( "#motion" ).append( '<div id="messageArea">Messages will be displayed here.</div>');
+		$( "#motion" ).append( '<div id="messageArea2">');
+
+		// $("#videoCanvas").css('display','none');
+		// $("#layer2").css('display','none');
+
+		var lastMotion = {};		// contains last movement so it doesn't repeat same point many times
+		var diferenciaTiempo = '';
+		
 		/**
 		 * Provides requestAnimationFrame in a cross browser way.
 		 * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -226,8 +245,17 @@ angular.module('motionApp')
 				var average = Math.round(sum / (3 * countPixels));
 				if (average > 50) // more than 20% movement detected
 				{
-					console.log( "Button " + buttons[b].name + " triggered." ); // do stuff
-					messageArea.innerHTML = "<font size='+4' color=" + buttons[b].name + "><b>Button " + buttons[b].name + " triggered.</b></font>";
+					// evita multiples click en mismo sitio en un 1/segundo
+					var d = new Date();
+					diferenciaTiempo = parseFloat(d.getTime())-parseFloat(lastMotion.t);
+					if(diferenciaTiempo>500) lastMotion.p='';
+					if ( buttons[b].name !=  lastMotion.p ) {
+						console.log( "Button " + buttons[b].name + " " + diferenciaTiempo ); // do stuff
+						messageArea.innerHTML = "<font size='+4' color=" + buttons[b].name + "><b>Button " + buttons[b].name + " triggered.</b></font>";
+						lastMotion = {'p':buttons[b].name, 't':d.getTime()};
+						// si ha pasado mas de un segundo permite clic otra vez en mismo boton
+						// if(diferenciaTiempo>3000) lastMotion.p='';
+					}
 				}
 			}
 		}

@@ -127,7 +127,7 @@ CamMotion.Engine = function(options) {
 		} else if (navigator.webkitGetUserMedia) {
 
 			navigator.webkitGetUserMedia({audio: true, video: true}, function(stream) {
-				videoNode.src = window.webkitURL.createObjectURL(stream);
+				videoNode.src = window.URL.createObjectURL(stream);
 				onStream(stream);
 			}, noStream);
 		} else {
